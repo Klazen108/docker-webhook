@@ -1,7 +1,5 @@
 # docker-puller ![License MIT](https://go-shields.herokuapp.com/license-MIT-blue.png)
 
-[![Travis-CI Status](https://secure.travis-ci.org/glowdigitalmedia/docker-puller.png?branch=master)](http://travis-ci.org/#!/glowdigitalmedia/docker-puller)
-
 Listen for web hooks (i.e: from docker.io builds) and run a command after that.
 
 Introduction
@@ -31,4 +29,9 @@ Example docker-puller configuration
 
 Example docker container launch
 ===============================
-docker run -t -i --name webhook -p 8000:8000 -v scripts:/root/dockerpuller/scripts -v config.json:/root/config.json xorilog/docker-webhook
+```bash
+docker run -t -i --name webhook -p 8000:8000 \
+ -v scripts:/root/dockerpuller/scripts 
+ -v config.json:/root/config.json 
+ klazen108/docker-webhook
+```
