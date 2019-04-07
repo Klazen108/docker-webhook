@@ -34,7 +34,7 @@ def hook_listen():
     print("Repo name: {data}".format(data=data['repository']['repo_name']))
     print("Repo status: {data}".format(data=data['repository']['status']))
     try:
-        subprocess.call(['execute_remote.sh',
+        subprocess.call(['/root/dockerpuller/execute_remote.sh',
             config['host_user'], 
             "/root/dockerpuller/scripts/{}.sh".format(hook)
         ])
