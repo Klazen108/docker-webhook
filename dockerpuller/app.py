@@ -34,7 +34,11 @@ def hook_listen():
     print("Repo name: {data}".format(data=data['repository']['repo_name']))
     print("Repo status: {data}".format(data=data['repository']['status']))
     try:
-        subprocess.call(['scripts/execute_remote.sh', hook_value])
+        subprocess.call(['ssh',
+            '-i','/key/key', 
+            '{}@127.0.0.1'.format(config['host_user']), 
+            "sudo bash ' < {}".format(hook_value)
+        ])
         return jsonify(success=True), 200
     except OSError as e:
         return jsonify(success=False, error=str(e)), 400
@@ -45,7 +49,12 @@ def load_config():
 
 if __name__ == "__main__":
     config = load_config()
-    #print("Registered hooks:")
-    #print(*config['hooks'], sep = "\n")
+    if 'host_user' not in config:
+        raise ValueError("Missing host_user in config!")
+    print("")
+    print("Registered hooks:")
+    for key in config['hooks']:
+        print (key,':',config['hooks']['key'])
+    dump(*config['hooks'])
     #print("Found scripts:")
     app.run(host=config.get('host', 'localhost'), port=config.get('port', 8000))
