@@ -55,6 +55,5 @@ if __name__ == "__main__":
     print("Registered hooks:")
     for key in config['hooks']:
         print (key,':',config['hooks'][key])
-    dump(*config['hooks'])
     #print("Found scripts:")
     app.run(host=config.get('host', 'localhost'), port=config.get('port', 8000))
