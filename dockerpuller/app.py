@@ -38,7 +38,7 @@ def hook_listen():
             '-i','/key/key', 
             '-oStrictHostKeyChecking=no',
             '{}@127.0.0.1'.format(config['host_user']), 
-            "'sudo bash ' < {}".format(hook_value)
+            "'sudo bash -s' < {}".format(hook_value)
         ])
         return jsonify(success=True), 200
     except OSError as e:
