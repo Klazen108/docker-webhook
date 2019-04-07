@@ -34,14 +34,10 @@ def hook_listen():
     print("Repo name: {data}".format(data=data['repository']['repo_name']))
     print("Repo status: {data}".format(data=data['repository']['status']))
     try:
-        with open("scripts/{}.sh".format(hook)) as script:
-            subprocess.call(['ssh',
-                '-i','/key/key', 
-                '-oStrictHostKeyChecking=no',
-                '{}@127.0.0.1'.format(config['host_user']), 
-                "'sudo bash -s'"],
-                stdin=script
-            )
+        subprocess.call(['execute_remote.sh',
+            config['host_user'], 
+            "/root/dockerpuller/scripts/{}.sh".format(hook)
+        ])
         return jsonify(success=True), 200
     except OSError as e:
         return jsonify(success=False, error=str(e)), 400
