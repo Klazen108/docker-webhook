@@ -36,8 +36,9 @@ def hook_listen():
     try:
         subprocess.call(['ssh',
             '-i','/key/key', 
+            '-oStrictHostKeyChecking=no',
             '{}@127.0.0.1'.format(config['host_user']), 
-            "sudo bash ' < {}".format(hook_value)
+            "'sudo bash ' < {}".format(hook_value)
         ])
         return jsonify(success=True), 200
     except OSError as e:
@@ -56,4 +57,5 @@ if __name__ == "__main__":
     for key in config['hooks']:
         print (key,':',config['hooks'][key])
     #print("Found scripts:")
+    print("token: {}".format(config['token']))
     app.run(host=config.get('host', 'localhost'), port=config.get('port', 8000))
