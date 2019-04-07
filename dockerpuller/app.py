@@ -20,19 +20,12 @@ def hook_listen():
     if not hook:
         return jsonify(success=False, error="Invalid request: missing hook"), 400
 
-    hook_value = config['hooks'].get(hook)
-    if not hook_value:
-        return jsonify(success=False, error="Hook not found"), 404
+    if not hook in config['hooks']:
+        return jsonify(success=False, error="Hook not available"), 404
 
     s = request.data
     data = json.loads(s)
-    print("Push date: {data}".format(data=data['push_data']['pushed_at']))
-    print("Push images: {data}".format(data=data['push_data']['images']))
-    print("Push tag: {data}".format(data=data['push_data']['tag']))
-    print("Repo url: {data}".format(data=data['repository']['repo_url']))
-    print("Repo visibility: {data}".format(data=data['repository']['is_private']))
-    print("Repo name: {data}".format(data=data['repository']['repo_name']))
-    print("Repo status: {data}".format(data=data['repository']['status']))
+    print("Running hook: {}".format(hook))
     try:
         subprocess.call(['/root/dockerpuller/execute_remote.sh',
             config['host_user'], 
@@ -51,9 +44,9 @@ if __name__ == "__main__":
     if 'host_user' not in config:
         raise ValueError("Missing host_user in config!")
     print("")
-    print("Registered hooks:")
+    print("Webhook Token: {}".format(config['token']))
+    print("Available hooks:")
     for key in config['hooks']:
-        print (key,':',config['hooks'][key])
-    #print("Found scripts:")
-    print("token: {}".format(config['token']))
+        print (key)
+    print("Now standing by waiting to make your CI dreams come true!")
     app.run(host=config.get('host', 'localhost'), port=config.get('port', 8000))
