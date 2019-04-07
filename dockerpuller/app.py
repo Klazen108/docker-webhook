@@ -44,9 +44,18 @@ if __name__ == "__main__":
     if 'host_user' not in config:
         raise ValueError("Missing host_user in config!")
     print("")
+    #print some debug stuff
+    if 'token' not in config:
+        print("Token not in config! Check the readme for more info")
+        sys.exit()
     print("Webhook Token: {}".format(config['token']))
+
+    if 'hooks' not in config:
+        print("Hooks array not in config! Check the readme for more info")
+        sys.exit()
     print("Available hooks:")
     for key in config['hooks']:
         print (key)
+    
     print("Now standing by waiting to make your CI dreams come true!")
     app.run(host=config.get('host', 'localhost'), port=config.get('port', 8000))

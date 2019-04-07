@@ -14,18 +14,34 @@ docker-puller listen to these web hooks and can be configured to run a particula
 Example web hook
 ================
 
-In docker.io setup a web hook with an URL like this: https://myserver.com/dockerpuller?token=abc123&hook=myhook1
+In docker.io setup a web hook with an URL like this: https://myserver.com/dockerpuller?token=abc123&hook=server
 
-Example docker-puller configuration
+Example configuration
 ===================================
 
     {
         "port": 8000,
         "token": "abc123",
-        "hooks": {
-            "myhook1": "restart-container-myhook1.sh"
-        }
+        "hooks": ["server","website"]
     }
+
+server.sh and website.sh should be present in the scripts directory.
+
+Example docker restart script
+=============================
+
+This script updates the image, kills the existing container, and starts a replacement with any docker flags as needed.
+
+```bash
+#pull the latest
+docker pull repo/image-name
+#wipe out any existing instances
+docker kill container-name
+docker rm container-name
+#start the new container
+docker run -d --name=container-name repo/image-name
+echo server started.
+```
 
 Example docker container launch
 ===============================
@@ -36,3 +52,8 @@ docker run -t -i --name webhook -p 8000:8000 \
  -v ~/config.json:/root/config.json \
  klazen108/docker-webhook
 ```
+
+Docker Volumes:
+* /root/dockerpuller/scripts - place your docker continer rm/pull/restart scripts here
+* /key/key - mount your private key here
+* /root/config.json - mount your configuration script here
