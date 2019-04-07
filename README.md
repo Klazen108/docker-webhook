@@ -31,7 +31,8 @@ Example docker container launch
 ===============================
 ```bash
 docker run -t -i --name webhook -p 8000:8000 \
- -v scripts:/root/dockerpuller/scripts 
- -v config.json:/root/config.json 
+ -v ~/scripts:/root/dockerpuller/scripts \
+ -v ~/key:/key \
+ -v ~/config.json:/root/config.json \
  klazen108/docker-webhook
 ```

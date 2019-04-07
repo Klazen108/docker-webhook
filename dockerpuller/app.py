@@ -34,7 +34,7 @@ def hook_listen():
     print("Repo name: {data}".format(data=data['repository']['repo_name']))
     print("Repo status: {data}".format(data=data['repository']['status']))
     try:
-        subprocess.call([hook_value, '{data}'.format(data=json.dumps(data))])
+        subprocess.call(['scripts/execute_remote.sh', hook_value])
         return jsonify(success=True), 200
     except OSError as e:
         return jsonify(success=False, error=str(e)), 400
