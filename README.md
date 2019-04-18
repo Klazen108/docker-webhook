@@ -11,10 +11,25 @@ Docker.io gives you the possibility to set a web hook after a successful build. 
 
 docker-puller listen to these web hooks and can be configured to run a particular script, given a specific hook.
 
+SSH Setup
+=========
+
+You will need to generate a public/private keypair to allow the container to ssh to the host in order to perform commands.
+
+* Create a new user (with sudo rights if necessary)
+* Create a keypair:
+
+```ssh-keygen -t ecdsa -b 521```
+
+* Install the public key in your new user's .ssh/authorized_keys
+* Mount the private key in the container (see example docker container launch below)
+
+Read more: https://www.ssh.com/ssh/keygen/
+
 Example web hook
 ================
 
-In docker.io setup a web hook with an URL like this: https://myserver.com/dockerpuller?token=abc123&hook=server
+In docker.io setup a web hook with an URL like this: https://myserver.com:8000/dockerpuller?token=abc123&hook=server
 
 Example configuration
 ===================================
@@ -45,8 +60,11 @@ echo server started.
 
 Example docker container launch
 ===============================
+
+Here is how to start a docker-webhook container. Note that you must use `--net=host` because the script will attempt to ssh to the host system at 127.0.0.1.
+
 ```bash
-docker run -t -i --name webhook -p 8000:8000 \
+docker run -t -i --name webhook --net=host \
  -v ~/scripts:/root/dockerpuller/scripts \
  -v ~/key:/key \
  -v ~/config.json:/root/config.json \
