@@ -1,15 +1,10 @@
 # docker-puller ![License MIT](https://go-shields.herokuapp.com/license-MIT-blue.png)
 
-Listen for web hooks (i.e: from docker.io builds) and run a command after that.
+**Docker Puller** is you solution to in-place docker CI/CD.
 
-Introduction
-============
+Docker Puller complements a single-server container deployment. Traditional CI/CD workflows may involve a separate, standalone build and deploy utility such as Jenkins, but a Jenkins instance can be overkill when all you need is to fetch an updated image and restart a container. With Docker Puller, you can instruct a separate Continuous Integration pipeline (suck as GitHub + Docker.io) to trigger a container redeploy via a webhook.
 
-If you use docker.io (or any similar service) to build your Docker container, it may be possible that, once the new image is generated, you want your Docker host to automatically pull it and restart the container.
-
-Docker.io gives you the possibility to set a web hook after a successful build. Basically it does a POST on a defined URL and send some informations in JSON format.
-
-docker-puller listen to these web hooks and can be configured to run a particular script, given a specific hook.
+Docker Puller lives alongside your deployed containers and, using SSH, directs your host docker instance to fetch and redeploy any images when a webhook is triggered - such as after a build has completed!
 
 SSH Setup
 =========
@@ -29,7 +24,9 @@ Read more: https://www.ssh.com/ssh/keygen/
 Example web hook
 ================
 
-In docker.io setup a web hook with an URL like this: https://myserver.com:8000/dockerpuller?token=abc123&hook=server
+In docker.io, setup a web hook with an URL like this: https://myserver.com:8000/dockerpuller?token=abc123&hook=server
+
+The token should be the same as in your configuration, and the hook indicates which script Docker Puller should execute. In this case, `server.sh` would be invoked (make sure to whitelist the hook in the configuration as well).
 
 Example configuration
 ===================================
@@ -40,12 +37,12 @@ Example configuration
         "hooks": ["server","website"]
     }
 
-server.sh and website.sh should be present in the scripts directory.
+`server.sh` and `website.sh` should be present in the scripts directory - these scripts will then be available for execution via the webhook.
 
 Example docker restart script
 =============================
 
-This script updates the image, kills the existing container, and starts a replacement with any docker flags as needed.
+This example script updates the image, kills the existing container, and starts a replacement with any docker flags as needed. This script will be run on the host via SSH - so you have access to the parent docker environment.
 
 ```bash
 #pull the latest
