@@ -1,6 +1,6 @@
 # docker-puller ![License MIT](https://go-shields.herokuapp.com/license-MIT-blue.png)
 
-**Docker Puller** is you solution to in-place docker CI/CD.
+**Docker Puller** is your solution for in-place docker CI/CD.
 
 Docker Puller complements a single-server container deployment. Traditional CI/CD workflows may involve a separate, standalone build and deploy utility such as Jenkins, but a Jenkins instance can be overkill when all you need is to fetch an updated image and restart a container. With Docker Puller, you can instruct a separate Continuous Integration pipeline (suck as GitHub + Docker.io) to trigger a container redeploy via a webhook.
 
@@ -34,8 +34,14 @@ Example configuration
     {
         "port": 8000,
         "token": "abc123",
-        "hooks": ["server","website"]
+        "hooks": ["server","website"],
+        "host_user": "user"
     }
+    
+* port - the port to listen on
+* token - the token your webhook will post with (from the URL above)
+* hooks - whitelist of hooks
+* host_user - the user to ssh into the host with
 
 `server.sh` and `website.sh` should be present in the scripts directory - these scripts will then be available for execution via the webhook.
 
@@ -69,6 +75,6 @@ docker run -t -i --name webhook --net=host \
 ```
 
 Docker Volumes:
-* /root/dockerpuller/scripts - place your docker continer rm/pull/restart scripts here
+* /root/dockerpuller/scripts - place your docker container rm/pull/restart scripts here
 * /key/key - mount your private key here
 * /root/config.json - mount your configuration script here
