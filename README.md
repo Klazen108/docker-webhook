@@ -6,6 +6,12 @@ Docker Puller complements a single-server container deployment. Traditional CI/C
 
 Docker Puller lives alongside your deployed containers and, using SSH, directs your host docker instance to fetch and redeploy any images when a webhook is triggered - such as after a build has completed!
 
+Docker Image
+============
+
+A Docker image is available and ready for deployment on your server! Pull the image using `docker pull klazen108/docker-webhook` or view the [Docker.io Repo](https://hub.docker.com/r/klazen108/docker-webhook)
+
+
 SSH Setup
 =========
 
